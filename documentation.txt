@@ -16,3 +16,6 @@
 1.'Class Encapsulation': Logic for managing table actions is kept within the class to make the code clean and maintainable.
 2.'Dynamic Data Fetching': The data is loaded from a data.json file using fetch, separating data from the code.
 3.'Focus on Usability': Validation checks, sorting, and user-friendly prompts make the table easy to interact with.
+
+
+Note: Parts of this document were refined with the assistance of ChatGPT to clearly convey the implementation approach.
