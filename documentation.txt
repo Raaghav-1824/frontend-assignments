@@ -1,15 +1,18 @@
-|| Design Approach ||
+"Design Approach "
 
-"Reusable Class Design"
+1.'Reusable Class Design' : The AnimalTable class was created to handle table rendering, sorting, editing, and deleting in a modular way. This helps in reusing the same logic for different datasets like big cats, dogs, and fish.
 
-The AnimalTable class was created to handle table rendering, sorting, editing, and deleting in a modular way. This helps in reusing the same logic for different datasets like big cats, dogs, and fish.
-'Dynamic HTML Rendering' : The table structure is dynamically generated using JavaScript template literals. This makes the code adaptable for any data passed during initialization.
-'Instance-Specific Event Handling' : Buttons for edit, delete, and sorting are linked to instance-specific methods. This ensures multiple tables can coexist without interfering with each other.
-'Validation and Error Handling' : Validation prevents duplicate entries and ensures all required fields are provided during add or edit actions. Errors during JSON data fetch are also handled gracefully.
-'Simple Customization Options' : Features like sortable columns and optional name styling make the table flexible for different use cases.
+2.'Dynamic HTML Rendering' : The table structure is dynamically generated using JavaScript template literals. This makes the code adaptable for any data passed during initialization.
+
+3.'Instance-Specific Event Handling' : Buttons for edit, delete, and sorting are linked to instance-specific methods. This ensures multiple tables can coexist without interfering with each other.
+
+4.'Validation and Error Handling' : Validation prevents duplicate entries and ensures all required fields are provided during add or edit actions. Errors during JSON 
+ data fetch are also handled gracefully.
+
+5.'Simple Customization Options' : Features like sortable columns and optional name styling make the table flexible for different use cases.
 
 "Key Choices"
 
-'Class Encapsulation': Logic for managing table actions is kept within the class to make the code clean and maintainable.
-'Dynamic Data Fetching': The data is loaded from a data.json file using fetch, separating data from the code.
-'Focus on Usability': Validation checks, sorting, and user-friendly prompts make the table easy to interact with.
+1.'Class Encapsulation': Logic for managing table actions is kept within the class to make the code clean and maintainable.
+2.'Dynamic Data Fetching': The data is loaded from a data.json file using fetch, separating data from the code.
+3.'Focus on Usability': Validation checks, sorting, and user-friendly prompts make the table easy to interact with.
