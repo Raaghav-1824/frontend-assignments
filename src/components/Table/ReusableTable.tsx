@@ -1,20 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Table,
-  Text,
   TextInput,
   ScrollArea,
   Button,
+  Select,
   Pagination,
+  Group,
+  Text,
 } from "@mantine/core";
+import { IconSortAscending, IconSortDescending } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
+import { useTableStore } from "../../store/app.store";
 
 interface TableProps<T> {
   data: T[];
   columns: { key: string; label: string }[];
   onRowClick: (payload: T) => void;
-  detailLinkPrefix: string; // Used to generate detail page link
-  withPagination?: boolean; // Make sure this is optional
+  detailLinkPrefix: string;
+  withPagination?: boolean;
 }
 
 const ReusableTable = <T extends { id: string | number }>({
@@ -24,94 +28,136 @@ const ReusableTable = <T extends { id: string | number }>({
   detailLinkPrefix,
   withPagination = false,
 }: TableProps<T>) => {
-  const [search, setSearch] = useState("");
-  const [filteredData, setFilteredData] = useState(data);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const {
+    search,
+    filterColumn,
+    sortKey,
+    sortDirection,
+    currentPage,
+    itemsPerPage,
+    setSearch,
+    setFilterColumn,
+    setSortKey,
+    toggleSortDirection,
+    setCurrentPage,
+  } = useTableStore();
 
-  useEffect(() => {
-    setFilteredData(data);
-  }, [data]);
+  const filteredAndSortedData = React.useMemo(() => {
+    const filteredData = data.filter((item) => {
+      if (filterColumn === "All") {
+        return Object.values(item).some((val) =>
+          String(val).toLowerCase().includes(search.toLowerCase())
+        );
+      }
+      return String(item[filterColumn as keyof T] || "")
+        .toLowerCase()
+        .includes(search.toLowerCase());
+    });
 
-  useEffect(() => {
-    const searchedData = data.filter((item) =>
-      Object.values(item).some((val) =>
-        String(val).toLowerCase().includes(search.toLowerCase())
-      )
-    );
-    setFilteredData(searchedData);
-  }, [search, data]);
+    if (sortKey) {
+      return [...filteredData].sort((a, b) => {
+        const valA = String(a[sortKey as keyof T] || "").toLowerCase();
+        const valB = String(b[sortKey as keyof T] || "").toLowerCase();
+        if (valA === valB) return 0;
+        return sortDirection === "asc" ? (valA > valB ? 1 : -1) : valA < valB ? 1 : -1;
+      });
+    }
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.currentTarget.value);
-  };
+    return filteredData;
+  }, [data, search, filterColumn, sortKey, sortDirection]);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  // Pagination: Slice the data based on current page and items per page
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+  const paginatedData = React.useMemo(
+    () =>
+      filteredAndSortedData.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+      ),
+    [filteredAndSortedData, currentPage, itemsPerPage]
   );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [data, search, filterColumn]);
 
   return (
     <ScrollArea style={{ maxWidth: "100%" }}>
-      <TextInput
-        placeholder="Search..."
-        value={search}
-        onChange={handleSearch}
+      <Group
+        align="center"
         mb="md"
+        position="apart"
         style={{
-          width: "100%",
-          padding: "8px",
-          borderRadius: "8px",
-          border: "1px solid #ddd",
+          gap: "1rem",
+          flexDirection: "row",
         }}
-      />
-      <Table
-        striped
-        highlightOnHover
-        style={{ width: "100%", minWidth: "700px" }}
+        className="search-filter-container"
       >
+        <TextInput
+          placeholder="Search..."
+          value={search}
+          onChange={(e) => setSearch(e.currentTarget.value)}
+          style={{
+            flex: 2,
+            padding: "8px",
+            borderRadius: "8px",
+            border: "1px solid #ddd",
+          }}
+        />
+        <Select
+          placeholder="Filter by"
+          data={["All", ...columns.map((col) => col.key)]}
+          value={filterColumn}
+          onChange={(value) => setFilterColumn(value || "All")}
+          style={{
+            flex: 1,
+            padding: "8px",
+            borderRadius: "8px",
+          }}
+        />
+      </Group>
+
+      <Table striped highlightOnHover className="responsive-table">
         <thead>
           <tr>
             {columns.map(({ key, label }) => (
               <th
                 key={key}
+                onClick={() => {
+                  if (sortKey === key) {
+                    toggleSortDirection();
+                  } else {
+                    setSortKey(key);
+                  }
+                }}
                 style={{
                   textAlign: "left",
                   padding: "12px 16px",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  color: "#333",
+                  cursor: "pointer",
+                  fontWeight: "bold",
                 }}
+                className={key === "name" || key === "detail" ? "" : "hidden-mobile"}
               >
-                <Text>{label}</Text>
+                <Group spacing="xs">
+                  <Text>{label}</Text>
+                  {sortKey === key &&
+                    (sortDirection === "asc" ? (
+                      <IconSortAscending size={14} />
+                    ) : (
+                      <IconSortDescending size={14} />
+                    ))}
+                </Group>
               </th>
             ))}
-            <th>Actions</th> {/* Added a column for actions (Detail button) */}
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {paginatedData.map((row) => (
-            <tr
-              key={String(row.id)} // Ensure the key is unique and always a string
-              style={{
-                cursor: "pointer",
-                borderBottom: "1px solid #f2f2f2",
-              }}
-              onClick={() => onRowClick(row)}
-            >
+            <tr key={String(row.id)} onClick={() => onRowClick(row)}>
               {columns.map(({ key }) => (
                 <td
                   key={key}
-                  style={{
-                    padding: "12px 16px",
-                    fontSize: "14px",
-                    color: "#555",
-                  }}
+                  style={{ padding: "12px 16px" }}
+                  className={key === "name" || key === "detail" ? "" : "hidden-mobile"}
                 >
                   {row[key as keyof T] !== undefined
                     ? String(row[key as keyof T])
@@ -119,9 +165,8 @@ const ReusableTable = <T extends { id: string | number }>({
                 </td>
               ))}
               <td style={{ padding: "12px 16px" }}>
-                {/* Detail Button */}
                 <Link to={`${detailLinkPrefix}/${row.id}`}>
-                  <Button variant="outline" size="xs">
+                  <Button size="xs" variant="outline">
                     Detail
                   </Button>
                 </Link>
@@ -130,35 +175,27 @@ const ReusableTable = <T extends { id: string | number }>({
           ))}
         </tbody>
       </Table>
+
       {withPagination && (
         <Pagination
-          value={currentPage} // Use 'value' instead of 'page'
-          onChange={handlePageChange}
-          total={Math.ceil(filteredData.length / itemsPerPage)}
-          style={{
-            marginTop: "20px",
-            textAlign: "center", 
-            justifyContent: "center", 
-          }}
-          size="sm" 
-          styles={(theme) => ({
-            control: {
-              fontSize: "12px", 
-              height: "30px", 
-              padding: "0 8px", 
-            },
-            item: {
-              border: "none", 
-              backgroundColor: "transparent", 
-              color: theme.colors.gray[7],
-              "&[data-active]": {
-                backgroundColor: theme.colors.blue[6],
-                color: "white", 
-              },
-            },
-          })}
+          value={currentPage}
+          onChange={setCurrentPage}
+          total={Math.ceil(filteredAndSortedData.length / itemsPerPage)}
+          style={{ marginTop: "20px", justifyContent: "center" }}
         />
       )}
+      <style>
+        {`
+          @media (max-width: 768px) {
+            .search-filter-container {
+              flex-direction: column;
+            }
+            .hidden-mobile {
+              display: none;
+            }
+          }
+        `}
+      </style>
     </ScrollArea>
   );
 };

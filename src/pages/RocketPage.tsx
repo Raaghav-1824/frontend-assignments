@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { Center, Loader, Text, Container, Box } from "@mantine/core";
+import { Center, Loader, Text, Container } from "@mantine/core";
 import { fetchApiData } from "../api/spaceXApi";
 import RocketDetailCard from "../components/RocketDetailCard";
 
@@ -24,10 +24,8 @@ const RocketPage = () => {
 
   if (error || !data) {
     return (
-      <Center>
-        <Text color="red">
-          Failed to fetch rocket details. Please try again.
-        </Text>
+      <Center style={{ paddingTop: "2rem" }}>
+        <Text color="red">Failed to fetch rocket details. Please try again.</Text>
       </Center>
     );
   }
@@ -35,17 +33,19 @@ const RocketPage = () => {
   return (
     <Container
       fluid
-      px={{ base: "xs", sm: "md", lg: "lg" }}
-      py={{ base: "xs", sm: "md", lg: "lg" }}
+      px={{ base: "xs", sm: "md", lg: "xl" }}
+      py={{ base: "xs", sm: "md", lg: "xl" }}
       style={{
-        marginTop: "56px", // Adjusted for fixed Navbar height
-        width: "calc(100% - 15%)", // Subtract navbar width
-        paddingTop: "80px", // Add extra padding for header
+        // marginTop: "56px", // Offset for navbar
+        height: "calc(100vh - 100px)", // Full height minus navbar
+        maxWidth: "100%",
+        padding: "0 1rem",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
     >
-      <Box style={{ maxWidth: "700px", width: "100%", margin: "auto" }}>
-        <RocketDetailCard rocket={data} />
-      </Box>
+      <RocketDetailCard rocket={data} />
     </Container>
   );
 };

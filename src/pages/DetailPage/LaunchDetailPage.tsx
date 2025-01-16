@@ -25,22 +25,22 @@ const LaunchDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <Container>
-        <Loader size="xl" />
+      <Container size="lg">
+        <Loader size="xl" variant="dots" />
       </Container>
     );
   }
 
   if (!launchData) {
     return (
-      <Container>
+      <Container size="lg">
         <Text color="red">No launch data available for this ID.</Text>
       </Container>
     );
   }
 
   return (
-    <Container>
+    <Container size="lg" style={{ padding: "20px" }}>
       <LaunchDetailCard launch={launchData} />
     </Container>
   );

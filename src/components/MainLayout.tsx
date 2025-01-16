@@ -1,10 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Box } from "@mantine/core";
 import { HeaderSearch } from "../components/Header/HeaderSearch";
 import { NavbarNested } from "../components/Navbar/NavbarNested";
 import { Outlet } from "react-router-dom";
 
-export function MainLayout({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: boolean; toggleNavbar: () => void }) {
+// Define the props type
+interface MainLayoutProps {
+  isNavbarOpen: boolean;
+  toggleNavbar: () => void;
+}
+
+export function MainLayout({ isNavbarOpen, toggleNavbar }: MainLayoutProps) {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Track if it's mobile screen
+
+  // Update the screen size on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // Close navbar when a navbar option is clicked (for mobile screens)
+  const handleNavbarItemClick = () => {
+    if (isMobile) {
+      toggleNavbar(); // Close navbar on mobile
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -21,8 +49,8 @@ export function MainLayout({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: boole
           top: 0,
           left: 0,
           right: 0,
-          zIndex: 1000, 
-          backgroundColor: "white", 
+          zIndex: 1000,
+          backgroundColor: "white",
           boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
         }}
       >
@@ -36,25 +64,48 @@ export function MainLayout({ isNavbarOpen, toggleNavbar }: { isNavbarOpen: boole
           top: "60px", // Adjust based on header height
           left: 0,
           bottom: 0,
-          width: isNavbarOpen ? "15%" : "0", // Adjust width based on navbar toggle state
-          transition: "width 0.3s ease", // Smooth transition when toggling
-          zIndex: 999, // Ensure it's below the header
+          width: isNavbarOpen ? "250px" : "0", // Adjust width for desktop behavior
+          transition: "width 0.3s ease", // Smooth transition for opening/closing
+          zIndex: 999,
           backgroundColor: "white",
           boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)", // Optional shadow
+
+          // Mobile behavior: Navbar as an overlay
+          "@media (max-width: 768px)": {
+            position: "fixed",
+            top: "60px", // Keep space for header
+            left: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 1001, // Ensure navbar is above main content
+            backgroundColor: "white",
+            width: isNavbarOpen ? "100%" : "0", // Full width on mobile
+            transition: "width 0.3s ease",
+          },
         }}
       >
-        {isNavbarOpen && <NavbarNested isOpen={isNavbarOpen} />}
+        {isNavbarOpen && (
+          <NavbarNested
+            isOpen={isNavbarOpen}
+            onItemClick={handleNavbarItemClick}  // Pass onItemClick prop
+          />
+        )}
       </Box>
 
       {/* Main Content Area */}
       <Box
         sx={{
-          marginTop: "60px", // To prevent content from hiding behind the fixed header
-          // marginLeft: isNavbarOpen ? "20%" : 0, // Adjust the content margin based on navbar state
-          transition: "margin-left 0.3s ease", // Smooth transition when toggling navbar
+          marginTop: "60px", // Adjust for header height
+          transition: "margin-left 0.3s ease", 
           padding: "20px",
-          paddingLeft: isNavbarOpen ? "15%" : 0, // Adjust padding to avoid overlap with navbar
-          overflowY: "auto", // Enable scroll for the content
+          paddingLeft: isNavbarOpen && !isMobile ? "250px" : 0, 
+
+          // Mobile behavior: Main content stays in place
+          "@media (max-width: 768px)": {
+            marginTop: "60px", 
+            paddingLeft: "0", 
+            transition: "none", 
+          },
         }}
       >
         <Outlet />

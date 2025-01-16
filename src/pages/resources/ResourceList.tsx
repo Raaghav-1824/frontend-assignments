@@ -12,6 +12,7 @@ import {
   Button,
   Container,
   ScrollArea,
+  Pagination,
 } from "@mantine/core";
 import { useParams, useNavigate } from "react-router-dom";
 import { fetchApiData } from "../../api/spaceXApi";
@@ -67,11 +68,14 @@ interface Rocket {
 const ResourceList: React.FC = () => {
   const { endpoint } = useParams<{ endpoint: string }>();
   const navigate = useNavigate();
+  const [page, setPage] = React.useState(1);
+  const itemsPerPage = 15; // Define items per page here
 
   // Ensure correct typing for useQuery
   const { data, error, isLoading } = useQuery({
-    queryKey: endpoint ? [endpoint] : ["default"], // Ensure a valid key is always provided
-    queryFn: () => fetchApiData(endpoint || ""),
+    queryKey: endpoint ? [endpoint, page] : ["default"], // Ensure a valid key is always provided
+    queryFn: () =>
+      fetchApiData(`${endpoint}?page=${page}&page_size=${itemsPerPage}`), // Fetcher function
     enabled: !!endpoint, // Only fetch when endpoint is defined
   });
 
@@ -93,6 +97,7 @@ const ResourceList: React.FC = () => {
 
   return (
     <Container size="lg">
+      {/* <HeaderSearch toggleNavbar={toggle} isNavbarOpen={opened} /> */}
       <div
         style={{
           display: "grid",
@@ -118,8 +123,22 @@ const ResourceList: React.FC = () => {
                 console.log("Payload clicked:", payload);
               }}
               detailLinkPrefix="/payload" // Added detailLinkPrefix for Payload
-              withPagination
             />
+            <div
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Pagination
+                onChange={(p) => setPage(p)}
+                total={Math.ceil((data as PayloadData[]).length / itemsPerPage)}
+                size="sm" // Smaller pagination size
+                color="blue"
+                style={{ marginTop: "10px" }} // Added spacing above pagination
+              />
+            </div>
           </ScrollArea>
         )}
 
@@ -298,8 +317,22 @@ const ResourceList: React.FC = () => {
                 console.log("Launch clicked:", launch);
               }}
               detailLinkPrefix="/launch-details"
-              withPagination
             />
+            <div
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
+              <Pagination
+                onChange={(p) => setPage(p)}
+                total={Math.ceil((data as Launch[]).length / itemsPerPage)}
+                size="sm"
+                color="blue"
+                style={{ marginTop: "10px" }}
+              />
+            </div>
           </ScrollArea>
         )}
       </div>

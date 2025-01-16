@@ -25,9 +25,10 @@ export function HeaderSearch({
         zIndex: 500,
         height: "60px",
         position: "relative",
+        flexWrap: "wrap",
       }}
     >
-      <Group style={{ alignItems: "center", gap: "10px" }}>
+      <Group style={{ alignItems: "center", gap: "10px", flex: 1 }}>
         <Burger
           opened={isNavbarOpen}
           onClick={toggleNavbar}
@@ -45,7 +46,15 @@ export function HeaderSearch({
         </Link>
       </Group>
 
-      <Group position="right" style={{ gap: "12px", flex: 1 }}>
+      <Group
+        position="right"
+        style={{
+          gap: "12px",
+          flex: 1,
+          justifyContent: "flex-end",
+          flexWrap: "wrap",
+        }}
+      >
         <Autocomplete
           placeholder="Search"
           icon={<IconSearch size={16} stroke={1.5} />}
@@ -71,6 +80,7 @@ export function HeaderSearch({
           style={{
             width: isNavbarOpen ? "200px" : "150px",
             maxWidth: "200px",
+            transition: "width 0.3s ease",
           }}
         />
       </Group>
