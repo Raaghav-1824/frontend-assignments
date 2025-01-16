@@ -9,7 +9,6 @@ import {
   Group,
   Text,
 } from "@mantine/core";
-import { IconSortAscending, IconSortDescending } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 import { useTableStore } from "../../store/app.store";
 
@@ -59,7 +58,13 @@ const ReusableTable = <T extends { id: string | number }>({
         const valA = String(a[sortKey as keyof T] || "").toLowerCase();
         const valB = String(b[sortKey as keyof T] || "").toLowerCase();
         if (valA === valB) return 0;
-        return sortDirection === "asc" ? (valA > valB ? 1 : -1) : valA < valB ? 1 : -1;
+        return sortDirection === "asc"
+          ? valA > valB
+            ? 1
+            : -1
+          : valA < valB
+          ? 1
+          : -1;
       });
     }
 
@@ -98,8 +103,8 @@ const ReusableTable = <T extends { id: string | number }>({
           style={{
             flex: 2,
             padding: "8px",
-            borderRadius: "8px",
-            border: "1px solid #ddd",
+            // borderRadius: "8px",
+            // border: "1px solid #ddd",
           }}
         />
         <Select
@@ -134,16 +139,17 @@ const ReusableTable = <T extends { id: string | number }>({
                   cursor: "pointer",
                   fontWeight: "bold",
                 }}
-                className={key === "name" || key === "detail" ? "" : "hidden-mobile"}
+                className={
+                  key === "name" || key === "detail" ? "" : "hidden-mobile"
+                }
               >
                 <Group spacing="xs">
                   <Text>{label}</Text>
-                  {sortKey === key &&
-                    (sortDirection === "asc" ? (
-                      <IconSortAscending size={14} />
-                    ) : (
-                      <IconSortDescending size={14} />
-                    ))}
+                  {sortKey === key && (
+                    <Text size="xs" style={{ color: "#007bff" }}>
+                      {sortDirection === "asc" ? "▲" : "▼"}
+                    </Text>
+                  )}
                 </Group>
               </th>
             ))}
@@ -157,7 +163,9 @@ const ReusableTable = <T extends { id: string | number }>({
                 <td
                   key={key}
                   style={{ padding: "12px 16px" }}
-                  className={key === "name" || key === "detail" ? "" : "hidden-mobile"}
+                  className={
+                    key === "name" || key === "detail" ? "" : "hidden-mobile"
+                  }
                 >
                   {row[key as keyof T] !== undefined
                     ? String(row[key as keyof T])
@@ -184,11 +192,14 @@ const ReusableTable = <T extends { id: string | number }>({
           style={{ marginTop: "20px", justifyContent: "center" }}
         />
       )}
+
       <style>
         {`
           @media (max-width: 768px) {
             .search-filter-container {
               flex-direction: column;
+              justify-content : center;
+              align-items : center;
             }
             .hidden-mobile {
               display: none;

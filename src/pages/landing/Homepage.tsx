@@ -55,13 +55,15 @@ export function Homepage({ isNavbarOpen }: { isNavbarOpen: boolean }) {
         flexDirection: "column",
         backgroundColor: "#f8f9fa",
         minHeight: "100vh",
+        justifyContent:"center",
+        alignItems:"center"
       }}
     >
       <Box
         sx={{
           flexGrow: 1,
           padding: "10px",
-          //   marginLeft: isNavbarOpen ? "20%" : 0,
+            // marginLeft: isNavbarOpen ? "20%" : 0,
           transition: "margin-left 0.4s ease",
         }}
       >
@@ -112,7 +114,7 @@ export function Homepage({ isNavbarOpen }: { isNavbarOpen: boolean }) {
                   mt="md"
                   radius="md"
                   component={Link}
-                  to={feature.link} // Use `to` instead of `href`
+                  to={feature.link} 
                 >
                   Details
                 </Button>

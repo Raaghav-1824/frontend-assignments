@@ -31,7 +31,7 @@ const LaunchDetailCard: React.FC<LaunchDetailCardProps> = ({ launch }) => {
 
   return (
     <MediaQuery
-      smallerThan={380}
+      smallerThan={400}
       styles={{
         flexDirection: "column",
         alignItems: "center",
@@ -58,26 +58,32 @@ const LaunchDetailCard: React.FC<LaunchDetailCardProps> = ({ launch }) => {
             flex: "1",
             width: "100%",
             maxWidth: "600px",
-            height: "100%",
+            height: "auto",
             backgroundColor: "#fff",
             border: "1px solid #eaeaea",
             boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            marginBottom: "20px", 
+            marginBottom: "20px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
           }}
         >
-          <Card.Section style={{ textAlign: "center" }}>
+          <Card.Section style={{ width: "100%", textAlign: "center" }}>
             {imageUrl ? (
               <Image
                 src={imageUrl}
                 alt={launch.name}
                 style={{
-                  objectFit: "contain",
                   borderRadius: "8px",
                   width: "100%",
                   height: "auto",
+                  maxHeight: "300px", // Prevent the image from being too tall
+                  objectFit: "cover",
                   padding: "10px",
                   backgroundColor: "#f9f9f9",
-                  marginBottom: "16px", 
+                  marginBottom: "16px",
                 }}
               />
             ) : (
@@ -92,14 +98,17 @@ const LaunchDetailCard: React.FC<LaunchDetailCardProps> = ({ launch }) => {
           radius="md"
           withBorder
           style={{
-            flex: "2",
+            flex: "1",
             height: "100%",
             width: "100%",
             maxWidth: "600px",
             backgroundColor: "#fff",
             border: "1px solid #eaeaea",
             boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-            marginBottom: "20px", 
+            marginBottom: "20px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
         >
           <Stack spacing="md">

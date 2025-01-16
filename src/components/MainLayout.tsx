@@ -3,6 +3,7 @@ import { Box } from "@mantine/core";
 import { HeaderSearch } from "../components/Header/HeaderSearch";
 import { NavbarNested } from "../components/Navbar/NavbarNested";
 import { Outlet } from "react-router-dom";
+import Footer from "./Footer/Footer";
 
 // Define the props type
 interface MainLayoutProps {
@@ -40,6 +41,8 @@ export function MainLayout({ isNavbarOpen, toggleNavbar }: MainLayoutProps) {
         flexDirection: "column",
         minHeight: "100vh",
         position: "relative",
+        padding :"15px 0px",
+       
       }}
     >
       {/* Fixed Header */}
@@ -61,10 +64,10 @@ export function MainLayout({ isNavbarOpen, toggleNavbar }: MainLayoutProps) {
       <Box
         sx={{
           position: "fixed",
-          top: "60px", // Adjust based on header height
+          top: "60px",
           left: 0,
           bottom: 0,
-          width: isNavbarOpen ? "250px" : "0", // Adjust width for desktop behavior
+          width: isNavbarOpen ? "250px" : "0", 
           transition: "width 0.3s ease", // Smooth transition for opening/closing
           zIndex: 999,
           backgroundColor: "white",
@@ -97,8 +100,8 @@ export function MainLayout({ isNavbarOpen, toggleNavbar }: MainLayoutProps) {
         sx={{
           marginTop: "60px", // Adjust for header height
           transition: "margin-left 0.3s ease", 
-          padding: "20px",
           paddingLeft: isNavbarOpen && !isMobile ? "250px" : 0, 
+          marginBottom :"20px",
 
           // Mobile behavior: Main content stays in place
           "@media (max-width: 768px)": {
@@ -109,7 +112,10 @@ export function MainLayout({ isNavbarOpen, toggleNavbar }: MainLayoutProps) {
         }}
       >
         <Outlet />
+      
+        
       </Box>
+      <Footer/>
     </Box>
   );
 }

@@ -57,7 +57,7 @@ export function CompanyInfo() {
           />
         </Card.Section>
         <Stack spacing="md" p="md">
-          <Text weight={700} size="xl">
+          <Text weight={600} size="xl">
             {companyData.name}
           </Text>
           <Text size="sm" color="dimmed">
