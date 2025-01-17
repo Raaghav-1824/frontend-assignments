@@ -37,6 +37,8 @@ import {
         navigate("/resources"); // Redirect to resources page after successful login
       } else {
         setError("Invalid username or password!");
+
+
       }
     };
   
@@ -70,9 +72,9 @@ import {
             mt={30}
             radius="md"
             sx={{
-              width: "400px", // Custom width
-              height: "auto", // Adjust height based on content
-              backgroundColor: "#ffffff", // White background for the form
+              width: "400px", 
+              height: "auto", 
+              backgroundColor: "#ffffff", 
             }}
           >
             {/* Error Notification */}

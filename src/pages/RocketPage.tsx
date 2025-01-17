@@ -36,7 +36,6 @@ const RocketPage = () => {
       px={{ base: "xs", sm: "md", lg: "xl" }}
       py={{ base: "xs", sm: "md", lg: "xl" }}
       style={{
-        // marginTop: "56px", // Offset for navbar
         height: "calc(100vh - 100px)", // Full height minus navbar
         maxWidth: "100%",
         padding: "0 1rem",

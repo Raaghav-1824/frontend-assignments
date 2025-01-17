@@ -41,6 +41,13 @@ const ReusableTable = <T extends { id: string | number }>({
     setCurrentPage,
   } = useTableStore();
 
+  // Set default sorting on initial load if no sortKey is set
+  useEffect(() => {
+    if (!sortKey && columns.length > 0) {
+      setSortKey(columns[0].key);  // Set the default sort key to the first column
+    }
+  }, [columns, sortKey, setSortKey]);
+
   const filteredAndSortedData = React.useMemo(() => {
     const filteredData = data.filter((item) => {
       if (filterColumn === "All") {
@@ -103,8 +110,6 @@ const ReusableTable = <T extends { id: string | number }>({
           style={{
             flex: 2,
             padding: "8px",
-            // borderRadius: "8px",
-            // border: "1px solid #ddd",
           }}
         />
         <Select
@@ -139,9 +144,7 @@ const ReusableTable = <T extends { id: string | number }>({
                   cursor: "pointer",
                   fontWeight: "bold",
                 }}
-                className={
-                  key === "name" || key === "detail" ? "" : "hidden-mobile"
-                }
+                className={key === "name" || key === "detail" ? "" : "hidden-mobile"}
               >
                 <Group spacing="xs">
                   <Text>{label}</Text>
@@ -163,9 +166,7 @@ const ReusableTable = <T extends { id: string | number }>({
                 <td
                   key={key}
                   style={{ padding: "12px 16px" }}
-                  className={
-                    key === "name" || key === "detail" ? "" : "hidden-mobile"
-                  }
+                  className={key === "name" || key === "detail" ? "" : "hidden-mobile"}
                 >
                   {row[key as keyof T] !== undefined
                     ? String(row[key as keyof T])

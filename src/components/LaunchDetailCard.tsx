@@ -73,14 +73,14 @@ const LaunchDetailCard: React.FC<LaunchDetailCardProps> = ({ launch }) => {
           <Card.Section style={{ width: "100%", textAlign: "center" }}>
             {imageUrl ? (
               <Image
+                fit="cover"
                 src={imageUrl}
                 alt={launch.name}
                 style={{
                   borderRadius: "8px",
                   width: "100%",
                   height: "auto",
-                  maxHeight: "300px", // Prevent the image from being too tall
-                  objectFit: "cover",
+                  maxHeight: "300px",
                   padding: "10px",
                   backgroundColor: "#f9f9f9",
                   marginBottom: "16px",

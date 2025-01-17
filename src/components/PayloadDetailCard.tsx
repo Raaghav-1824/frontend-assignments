@@ -64,7 +64,7 @@ const PayloadDetailCard: React.FC = () => {
         style={{
           maxWidth: "500px",
           margin: "20px auto",
-          backgroundColor: "#fff", // Clean white background
+          backgroundColor: "#fff", 
           border: "1px solid #ddd",
         }}
       >

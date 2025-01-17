@@ -7,8 +7,8 @@ import {
   Group,
   Stack,
   MediaQuery,
-} from "@mantine/core"; // Corrected to use MediaQuery
-import { Carousel } from "@mantine/carousel"; // Correct import
+} from "@mantine/core"; 
+import { Carousel } from "@mantine/carousel"; 
 
 interface RocketDetailProps {
   rocket: {
@@ -64,6 +64,7 @@ const RocketDetailCard: React.FC<RocketDetailProps> = ({ rocket }) => {
                     alt={`Rocket Image ${index + 1}`}
                     height={500}
                     radius="md"
+                    // fit="contain"
                     style={{
                       objectFit:"contain",
                       borderRadius: "8px",

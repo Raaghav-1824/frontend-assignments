@@ -2,6 +2,7 @@ import React from "react";
 import { IconSearch } from "@tabler/icons-react";
 import { Autocomplete, Burger, Group } from "@mantine/core";
 import { Link } from "react-router-dom";
+import { Text } from "@mantine/core";
 
 type HeaderSearchProps = {
   toggleNavbar: () => void;
@@ -35,14 +36,30 @@ export function HeaderSearch({
           size="sm"
           style={{ color: "#1a73e8", cursor: "pointer" }}
         />
-        <Link to="/" style={{ textAlign: "center" }}>
-          <img
-            src="/assets/SpaceX_Logo_Black.png"
-            alt="Project Logo"
-            width={100}
-            height={25}
-            style={{ cursor: "pointer" }}
-          />
+        <Link
+          to="/"
+          style={{
+            textAlign: "center",
+            textDecoration: "none", // Ensure no underline
+            display: "inline-block", // Ensure proper alignment
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "'Orbitron', sans-serif", // Futuristic font
+              fontWeight: "700", // Bold font
+              fontSize: "28px", // Slightly larger font size for visibility
+              letterSpacing: "3px", // More letter spacing for modern appeal
+              textAlign: "center",
+              color: "#1a1a1a", // Clean dark color
+              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)", // Subtle shadow for depth
+              cursor: "pointer", // Pointer cursor for better UX
+              transition: "color 0.3s ease, transform 0.2s ease", // Smooth hover effects
+            }}
+           
+          >
+            spaceX
+          </Text>
         </Link>
       </Group>
 

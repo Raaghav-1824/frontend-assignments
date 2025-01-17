@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Box } from "@mantine/core";
+import { Box, Button } from "@mantine/core";
 import { HeaderSearch } from "../components/Header/HeaderSearch";
 import { NavbarNested } from "../components/Navbar/NavbarNested";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom"; // useNavigate for back functionality
 import Footer from "./Footer/Footer";
 
 // Define the props type
@@ -12,7 +12,11 @@ interface MainLayoutProps {
 }
 
 export function MainLayout({ isNavbarOpen, toggleNavbar }: MainLayoutProps) {
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); // Track if it's mobile screen
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768); 
+  const navigate = useNavigate(); // Hook for navigation
+
+  // Hardcoded username (replace with dynamic user data as needed)
+  const username = "John Doe";
 
   // Update the screen size on window resize
   useEffect(() => {
@@ -34,18 +38,21 @@ export function MainLayout({ isNavbarOpen, toggleNavbar }: MainLayoutProps) {
     }
   };
 
+  // Back button functionality
+  const handleBackClick = () => {
+    navigate(-1); // Go back to the previous page
+  };
+
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         minHeight: "100vh",
-        position: "relative",
-        padding :"15px 0px",
-       
+        paddingTop: "30px",
       }}
     >
-      {/* Fixed Header */}
+      {/* Header */}
       <Box
         sx={{
           position: "fixed",
@@ -60,29 +67,48 @@ export function MainLayout({ isNavbarOpen, toggleNavbar }: MainLayoutProps) {
         <HeaderSearch toggleNavbar={toggleNavbar} isNavbarOpen={isNavbarOpen} />
       </Box>
 
-      {/* Fixed Navbar */}
+      {/* Back Button */}
+      <Button
+        onClick={handleBackClick}
+        sx={{
+          position: "fixed",
+          top: "15px",
+          left: "15px",
+          padding: "5px 10px",
+          fontSize: "14px", // Font size to make it look clean
+          borderRadius: "8px", // Rounded corners
+          transition: "all 0.3s ease", // Smooth transition
+          backgroundColor: "#007bff", // Button color
+          color: "#fff", // Text color
+          "&:hover": {
+            backgroundColor: "#0056b3", // Darker on hover
+          },
+        }}
+      >
+        Back
+      </Button>
+
+      {/* Navbar */}
       <Box
         sx={{
           position: "fixed",
           top: "60px",
           left: 0,
           bottom: 0,
-          width: isNavbarOpen ? "250px" : "0", 
-          transition: "width 0.3s ease", // Smooth transition for opening/closing
+          width: isNavbarOpen ? "250px" : "0",
+          transition: "width 0.3s ease",
           zIndex: 999,
           backgroundColor: "white",
-          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)", // Optional shadow
-
-          // Mobile behavior: Navbar as an overlay
+          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
           "@media (max-width: 768px)": {
             position: "fixed",
-            top: "60px", // Keep space for header
+            top: "60px",
             left: 0,
             right: 0,
             bottom: 0,
-            zIndex: 1001, // Ensure navbar is above main content
+            zIndex: 1001,
             backgroundColor: "white",
-            width: isNavbarOpen ? "100%" : "0", // Full width on mobile
+            width: isNavbarOpen ? "100%" : "0",
             transition: "width 0.3s ease",
           },
         }}
@@ -90,32 +116,41 @@ export function MainLayout({ isNavbarOpen, toggleNavbar }: MainLayoutProps) {
         {isNavbarOpen && (
           <NavbarNested
             isOpen={isNavbarOpen}
-            onItemClick={handleNavbarItemClick}  // Pass onItemClick prop
+            onItemClick={handleNavbarItemClick}
+            username={username} // Pass username here
           />
         )}
       </Box>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <Box
         sx={{
-          marginTop: "60px", // Adjust for header height
-          transition: "margin-left 0.3s ease", 
-          paddingLeft: isNavbarOpen && !isMobile ? "250px" : 0, 
-          marginBottom :"20px",
-
-          // Mobile behavior: Main content stays in place
+          flex: 1,
+          marginTop: "60px",
+          marginBottom: "30px",
+          transition: "margin-left 0.3s ease",
+          paddingLeft: isNavbarOpen && !isMobile ? "250px" : 0,
           "@media (max-width: 768px)": {
-            marginTop: "60px", 
-            paddingLeft: "0", 
-            transition: "none", 
+            marginTop: "60px",
+            paddingLeft: "0",
+            transition: "none",
           },
         }}
       >
         <Outlet />
-      
-        
       </Box>
-      <Footer/>
+
+      {/* Footer */}
+      <Box
+        sx={{
+          marginTop: "auto",
+          backgroundColor: "#f8f9fa",
+          padding: "15px",
+          textAlign: "center",
+        }}
+      >
+        <Footer />
+      </Box>
     </Box>
   );
 }

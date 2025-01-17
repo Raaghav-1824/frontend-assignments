@@ -218,6 +218,7 @@ const ResourceList: React.FC = () => {
                   </Group>
                 </Stack>
                 <Button
+                  style={{margin:"15px 0px"}}
                   variant="outline"
                   color="blue"
                   fullWidth
@@ -311,7 +312,7 @@ const ResourceList: React.FC = () => {
                 { key: "name", label: "Launch Name" },
                 { key: "date_utc", label: "Launch Date (UTC)" },
                 { key: "success", label: "Success" },
-                { key: "details", label: "Details" },
+                // { key: "details", label: "Details" },
               ]}
               onRowClick={(launch: Launch) => {
                 console.log("Launch clicked:", launch);
