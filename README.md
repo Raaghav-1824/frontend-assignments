@@ -1,6 +1,9 @@
 # Frontend Assignments
 
-This repository contains all my frontend projects, organized in separate subfolders. Each project demonstrates skills in **HTML, CSS, JavaScript, React, Redux, and TypeScript**.
+# Frontend Assignments
+
+This repository contains all my small frontend projects and assignments, organized in separate subfolders.  
+Each project is for **learning and practice purposes** and demonstrates skills in **HTML, CSS, JavaScript, React, Redux, and TypeScript**.
 
 ## Projects Included
 
@@ -25,4 +28,4 @@ This repository contains all my frontend projects, organized in separate subfold
 
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/your-username/frontend-assignments.git
+   git clone https://github.com/Raaghav-1824/frontend-assignments.git
